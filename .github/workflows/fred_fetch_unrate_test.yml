@@ -22,6 +22,8 @@ jobs:
       run: npm install
 
     - name: Run script to fetch data
+      env:
+        FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       run: node scripts/fetch_fred_data.js
 
     - name: Commit and push changes

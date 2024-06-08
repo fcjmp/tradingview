@@ -1,10 +1,9 @@
-name: Fetch FRED Data
+name: Fetch and Process FRED Data
 
 on:
   schedule:
-    # Runs every day at 05:00 UTC
-    - cron: '0 5 * * *'
-  workflow_dispatch:
+    - cron: '0 5 * * *'  # Run daily at 05:00 UTC
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   fetch-data:
@@ -14,23 +13,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Node.js environment
+    - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'  # You can specify any version of Node.js that you prefer
+        node-version: '16'
 
-    - name: Install dependencies
-      run: npm install axios dotenv
+    - name: Install Node.js dependencies
+      run: npm install
 
-    - name: Fetch and save FRED data
-      env:
-        FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-      run: node fetch_fred_data.js
+    - name: Run script to fetch data
+      run: node scripts/fetch_fred_data.js
 
     - name: Commit and push changes
       run: |
         git config --global user.email "fcjmp@users.noreply.github.com"
         git config --global user.name "GitHub Actions Bot"
-        git add data/*.csv
-        git commit -m "Update FRED data" || exit 0  # Exit 0 if no changes to commit
+        git add data/*
+        git commit -m "Automatically update data" || exit 0
         git push

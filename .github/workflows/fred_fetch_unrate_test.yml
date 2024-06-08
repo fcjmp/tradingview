@@ -29,7 +29,7 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --global user.email "yourusername@users.noreply.github.com"
+        git config --global user.email "fcjmp@users.noreply.github.com"
         git config --global user.name "GitHub Actions Bot"
         git add data/*.csv
         git commit -m "Update FRED data" || exit 0  # Exit 0 if no changes to commit

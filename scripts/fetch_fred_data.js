@@ -19,13 +19,17 @@ async function fetchSeriesData(series) {
         try {
             const response = await axios.get(url);
             const observations = response.data.observations;
-            const dataCSV = `Date,Value\n${observations.map(obs => `${obs.date},${obs.value}`).join('\n')}`;
-            const metadataCSV = `Units,Category\n${series.units},${series.category}`;
+            const data = observations.map(obs => ({ date: obs.date, value: obs.value }));
+            const combinedData = {
+                name: series.id,
+                description: series.description,
+                units: series.units,
+                category: series.category,
+                data: data
+            };
 
-            // Write data file
-            fs.writeFileSync(path.join(__dirname, '../data', `${series.id.toLowerCase()}.csv`), dataCSV);
-            // Write metadata file
-            fs.writeFileSync(path.join(__dirname, '../data', `${series.id.toLowerCase()}_metadata.csv`), metadataCSV);
+            // Write combined data file as JSON
+            fs.writeFileSync(path.join(__dirname, '../data', `${series.id.toLowerCase()}.json`), JSON.stringify(combinedData, null, 2));
 
             console.log(`${series.id} data and metadata fetched and saved successfully.`);
             break; // Break the loop if data is fetched successfully

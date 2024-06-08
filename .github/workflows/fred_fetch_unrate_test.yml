@@ -27,12 +27,9 @@ jobs:
       run: node scripts/fetch_fred_data.js
 
     - name: Commit and push changes
-      env:
-        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         git config --global user.email "fcjmp@users.noreply.github.com"
         git config --global user.name "GitHub Actions Bot"
         git add data/*
-        git commit -m "Automatically update data" || exit 0  # Only commit if there are changes
-        git remote set-url origin https://x-access-token:${PERSONAL_ACCESS_TOKEN}@github.com/fcjmp/tradingview.git
+        git commit -m "Automatically update data" || exit 0
         git push
